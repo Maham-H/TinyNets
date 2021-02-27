@@ -1,4 +1,6 @@
-### Gives all networks used in the training
+### Provides architecture of networks used in the training
+import torch
+import torch.nn as nn
 
 ### Multi Network architecture for sub networks
 class section_NN(nn.Module):
