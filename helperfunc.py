@@ -146,8 +146,8 @@ def loss1_der(In,all_in,all_out,b,o,dim,sn,NN,config,lossi,mse):
         dbm = np.sum(d_hps(In,b[i],o[i+1],c)*dmse[str(i)])
         for j in range(i+1,sn):
             Inn = np.array(all_in["batch_for_sec_"+str(j)])
-            dbev += np.sum((d_hps(Inn,b[j],o[j+1],c)+d_lps(In,b[j],o[j+1],c))*dv[str(j)])
-            dbem += np.sum((d_hps(Inn,b[j],o[j+1],c)+d_lps(In,b[j],o[j+1],c))*dmse[str(j)])
+            dbev += np.sum((d_hps(Inn,b[j],o[j+1],c)+d_lps(Inn,b[j],o[j+1],c))*dv[str(j)])
+            dbem += np.sum((d_hps(Inn,b[j],o[j+1],c)+d_lps(Inn,b[j],o[j+1],c))*dmse[str(j)])
         dbtv =  dbv + dbev
         dbtm = dbm + dbem
         grad['bn'+str(i)] =-( phi_3*dbtm + phi_1*dbtv + phi_2*ds)
