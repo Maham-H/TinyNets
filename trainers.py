@@ -120,9 +120,8 @@ def traintiny(config, X_train, y_train, X_val, y_val):
         outputs = NN(X_val)
         val_loss.append(criterion(outputs, y_val).item())
         
-
-        
-    return NN,criterion,train_loss,val_loss
+      
+    return NN,criterion, train_loss,val_loss
 
 def trainsect(config, In, out,Sn,o_n,bn, X_val, y_val):
         
@@ -144,8 +143,7 @@ def trainsect(config, In, out,Sn,o_n,bn, X_val, y_val):
     val_loss = {}
     NN ={}
     loss=np.zeros(Sn)
-    outputs = {}
-    
+
     
     for i in range(Sn):
         train_loss[str(i)] = []
@@ -177,7 +175,7 @@ def trainsect(config, In, out,Sn,o_n,bn, X_val, y_val):
         y_val1 = val_out["batch_for_sec_"+str(i)]
         
         X_val1 = torch.tensor(X_val1, dtype=torch.float).to(device) #  tensor
-        y_val1 = torch.tensor(y_val1, dtype=torch.float).to(device)# tensor
+        y_val1 = torch.tensor(y_val1, dtype=torch.float).to(device) # tensor
         Nb = X_train.size()[0]
         
         
@@ -202,9 +200,9 @@ def trainsect(config, In, out,Sn,o_n,bn, X_val, y_val):
             outputs = NN[str(i)](X_val1)
             val_loss[str(i)].append(criterion(outputs, y_val1).item())
             
-        net = NN[str(i)]
-        outputs[str(i)] = net(X_train.to(device))
-        loss[i] = criterion(outputs[str(i)], y_train.to(device)).item()
+        net = NN[str(i)].to(device)
+        outputs = net(X_train.to(device))
+        loss[i] = criterion(outputs, y_train.to(device)).item()
 
         
         print('data points for section:'+str(i)+' are: ',str(Nb))
