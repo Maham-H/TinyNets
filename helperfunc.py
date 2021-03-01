@@ -46,10 +46,10 @@ def forwardMSE(net,In,out):
     for param in net.parameters():
         if i%2==0:
             
-            weights['W'+str(j)]=param.data.detach().numpy()
+            weights['W'+str(j)]=param.cpu().data.detach().numpy()
             j+=1
         else:
-            weights['b'+str(k)]=param.data.detach().numpy()
+            weights['b'+str(k)]=param.cpu().data.detach().numpy()
             k+=1
         i+=1
 
@@ -144,10 +144,10 @@ def loss1_der(In,all_in,all_out,b,o,dim,sn,NN,config,lossi,mse):
         dbem = 0
         dbv = np.sum(d_hps(In,b[i],o[i+1],c)*dv[str(i)])
         dbm = np.sum(d_hps(In,b[i],o[i+1],c)*dmse[str(i)])
-        for j in range(i+1,sn):
-            Inn = np.array(all_in["batch_for_sec_"+str(j)])
-            dbev += np.sum((d_hps(Inn,b[j],o[j+1],c)+d_lps(Inn,b[j],o[j+1],c))*dv[str(j)])
-            dbem += np.sum((d_hps(Inn,b[j],o[j+1],c)+d_lps(Inn,b[j],o[j+1],c))*dmse[str(j)])
+        #for j in range(i+1,sn):
+        #    Inn = np.array(all_in["batch_for_sec_"+str(j)])
+        #    dbev += np.sum((d_hps(Inn,b[j],o[j+1],c)+d_lps(Inn,b[j],o[j+1],c))*dv[str(j)])
+        #    dbem += np.sum((d_hps(Inn,b[j],o[j+1],c)+d_lps(Inn,b[j],o[j+1],c))*dmse[str(j)])
         dbtv =  dbv + dbev
         dbtm = dbm + dbem
         grad['bn'+str(i)] =-( phi_3*dbtm + phi_1*dbtv + phi_2*ds)
@@ -229,9 +229,10 @@ def gen_s_b_o(bold,b,o,config,In,thresh=0.2):
     if bnew[snew-1]+onew[snew]>u_t:
         bnew[snew-1] = u_t -onew[snew]
         if bnew[snew-1]<thresh:
-            snew -=1
+            
             bnew = bnew[0:snew-1]
             onew = onew[0:snew]
+            snew -=1
             
     return snew,bnew,onew
 ###################################################################################
