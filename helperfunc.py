@@ -3,10 +3,10 @@ import numpy as np
 #filter and derivatives
 
 def highpass(data,offset,band,slope=10):
-    return 1/(1+ np.exp(slope*(data-(offset+band))))
+    return np.nan_to_num(1/(1+ np.exp(slope*(data-(offset+band)))), copy=True, nan=0.0, posinf=500, neginf=-500)
 
 def lowpass(data,offset,band,slope=10):
-    return 1/(1+ np.exp(slope*(-data+offset)))
+    return np.nan_to_num(1/(1+ np.exp(slope*(-data+offset))), copy=True, nan=0.0, posinf=500, neginf=-500)
 
 def filt(x,o,b,c=10):
     hps = highpass(x,o,b,c)
@@ -15,11 +15,11 @@ def filt(x,o,b,c=10):
 
 def d_hps(x,o,b,c=10):
     hps =  highpass(x,o,b,c)
-    return c*(hps)*(1-hps)
+    return np.nan_to_num((hps)*(1-hps), copy=True, nan=0.0, posinf=500, neginf=-500)
 
 def d_lps(x,o,b,c=10):
     lps =  lowpass(x,o,b,c)
-    return -c*(lps)*(1-lps)    
+    return np.nan_to_num(-(lps)*(1-lps), copy=True, nan=0.0, posinf=500, neginf=-500)    
 
 ##################################################################################
 
